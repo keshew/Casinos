@@ -56,10 +56,9 @@ private extension ContentView {
     }
 
     var cabinet: some View {
-        // Maintain a clean aspect so everything fits on small screens
         GeometryReader { geo in
             let cabinetWidth = min(geo.size.width, 420)
-            let cabinetHeight = cabinetWidth * 0.62 // 5:3 grid + padding inside cabinet
+            let cabinetHeight = cabinetWidth * 0.62
             VStack(spacing: 0) {
                 reelsGrid(width: cabinetWidth, height: cabinetHeight)
             }
@@ -121,7 +120,6 @@ private extension ContentView {
 
     var controlsBar: some View {
         VStack(spacing: 10) {
-            // Top row: Bet - and Bet +
             HStack(spacing: 12) {
                 Button(action: game.decreaseBet) {
                     largePill(icon: "minus.circle.fill", text: "Bet")
@@ -130,7 +128,6 @@ private extension ContentView {
                     largePill(icon: "plus.circle.fill", text: "Bet")
                 }
             }
-            // Bottom row: single centered SPIN/STOP
             HStack {
                 Spacer()
                 if game.isSpinning {

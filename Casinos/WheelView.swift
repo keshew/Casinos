@@ -81,7 +81,7 @@ struct WheelView: View {
                         .padding(.horizontal)
                         .frame(width: 140, height: 50)
                 }
-//                .disabled(isSpinning || spinsLeft <= 0)
+                .disabled(isSpinning || spinsLeft <= 0)
                 
                 Spacer()
             }
@@ -128,8 +128,8 @@ struct WheelView: View {
     }
 
     private func spin() {
-//        guard !isSpinning else { return }
-//        guard spinsLeft > 0 else { return }
+        guard !isSpinning else { return }
+        guard spinsLeft > 0 else { return }
         isSpinning = true
         resultText = ""
         spinsLeft -= 1
@@ -154,15 +154,15 @@ struct WheelView: View {
     }
 
     private func prizeForAngle(_ angle: Double) -> Int {
-        // Wheel sectors CLOCKWISE starting from the top under the pin (per provided image)
         let prizes = [100, 200, 300, 400, 500, 600, 700, 800]
 
-        // Normalize to 0..360
         let normalized = (angle.truncatingRemainder(dividingBy: 360) + 360).truncatingRemainder(dividingBy: 360)
-        // Center the 45° sectors (half-sector offset)
-        let corrected = (normalized + 22.5).truncatingRemainder(dividingBy: 360)
-        let index = Int(corrected / 45.0) % prizes.count
-        return prizes[index + 2]
+        let adjusted = (normalized + 22.5).truncatingRemainder(dividingBy: 360)
+        let originalIndex = Int(adjusted / 45.0) % prizes.count
+
+        let correctedIndex = (prizes.count - originalIndex) % prizes.count
+
+        return prizes[correctedIndex]
     }
 
     private func loadSpinsState() {

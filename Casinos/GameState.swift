@@ -27,6 +27,11 @@ final class GameState: ObservableObject {
     let paylines = Paylines20.all
     private let engine = SlotEngine()
 
+    init() {
+        var rng: any RandomNumberGenerator = SystemRandomNumberGenerator()
+        matrix = SlotSymbolFactory.randomMatrix(using: &rng)
+    }
+    
     func spin() {
         guard !isSpinning else { return }
         let totalBet = betPerLine * paylines.count
@@ -39,17 +44,13 @@ final class GameState: ObservableObject {
         lineWins = []
         AudioManager.shared.play("spin")
 
-        // Simulate spin delay
         Task { [weak self] in
             guard let self else { return }
-            // animate by updating reels a few times
             for _ in 0..<15 {
                 var rng: any RandomNumberGenerator = SystemRandomNumberGenerator()
                 self.matrix = SlotSymbolFactory.randomMatrix(using: &rng)
-                try? await Task.sleep(nanoseconds: 60_000_000) // 60ms per frame
+                try? await Task.sleep(nanoseconds: 60_000_000)
             }
-            // extra 2 seconds to prolong spinning
-//            try? await Task.sleep(nanoseconds: 2_000_000_000)
 
             let result = engine.spin(betPerLine: betPerLine)
             self.matrix = result.matrix
