@@ -11,7 +11,8 @@ import SwiftUI
 struct CasinosApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            NavigationStack { LoadingView() }
+                .environmentObject(GameState())
         }
     }
 }
