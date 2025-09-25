@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		86BED2F62E817BA7001DF87D /* Casinos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Casinos.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		86BED2F62E817BA7001DF87D /* Win Slots Casino.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Win Slots Casino.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -40,7 +40,7 @@
 		86BED2F72E817BA7001DF87D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				86BED2F62E817BA7001DF87D /* Casinos.app */,
+				86BED2F62E817BA7001DF87D /* Win Slots Casino.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,9 +48,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		86BED2F52E817BA7001DF87D /* Casinos */ = {
+		86BED2F52E817BA7001DF87D /* Win Slots Casino */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 86BED3042E817BA9001DF87D /* Build configuration list for PBXNativeTarget "Casinos" */;
+			buildConfigurationList = 86BED3042E817BA9001DF87D /* Build configuration list for PBXNativeTarget "Win Slots Casino" */;
 			buildPhases = (
 				86BED2F22E817BA7001DF87D /* Sources */,
 				86BED2F32E817BA7001DF87D /* Frameworks */,
@@ -63,11 +63,11 @@
 			fileSystemSynchronizedGroups = (
 				86BED2F82E817BA7001DF87D /* Casinos */,
 			);
-			name = Casinos;
+			name = "Win Slots Casino";
 			packageProductDependencies = (
 			);
 			productName = Casinos;
-			productReference = 86BED2F62E817BA7001DF87D /* Casinos.app */;
+			productReference = 86BED2F62E817BA7001DF87D /* Win Slots Casino.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -85,7 +85,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 86BED2F12E817BA7001DF87D /* Build configuration list for PBXProject "Casinos" */;
+			buildConfigurationList = 86BED2F12E817BA7001DF87D /* Build configuration list for PBXProject "Win Slots Casino" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -99,7 +99,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				86BED2F52E817BA7001DF87D /* Casinos */,
+				86BED2F52E817BA7001DF87D /* Win Slots Casino */,
 			);
 		};
 /* End PBXProject section */
@@ -255,6 +255,7 @@
 				DEVELOPMENT_TEAM = 59WWFG63NN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Win Slots Casino";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -284,6 +285,7 @@
 				DEVELOPMENT_TEAM = 59WWFG63NN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Win Slots Casino";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -305,7 +307,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		86BED2F12E817BA7001DF87D /* Build configuration list for PBXProject "Casinos" */ = {
+		86BED2F12E817BA7001DF87D /* Build configuration list for PBXProject "Win Slots Casino" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				86BED3022E817BA9001DF87D /* Debug */,
@@ -314,7 +316,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		86BED3042E817BA9001DF87D /* Build configuration list for PBXNativeTarget "Casinos" */ = {
+		86BED3042E817BA9001DF87D /* Build configuration list for PBXNativeTarget "Win Slots Casino" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				86BED3052E817BA9001DF87D /* Debug */,

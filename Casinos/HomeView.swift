@@ -15,8 +15,8 @@ struct HomeView: View {
                     .ignoresSafeArea()
                 
                 VStack(spacing: 20) {
-                    Text("Название ")
-                        .font(.largeTitle).bold().foregroundColor(.yellow)
+                    Text("Win Slots Casino")
+                        .font(.title).bold().foregroundColor(.yellow)
                         .shadow(color: .yellow.opacity(0.6), radius: 10)
                     
                     Spacer()
