@@ -81,10 +81,8 @@ final class GameState: ObservableObject {
             self.jackpotWon = result.jackpotWon
             self.balance += result.totalWin
             self.isSpinning = false
-            if result.totalWin > 0 {
-            }
-            if result.jackpotWon {
-            }
+         
+
             self.evaluateAchievements()
         }
     }

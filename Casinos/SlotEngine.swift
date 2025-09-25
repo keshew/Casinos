@@ -29,7 +29,18 @@ final class SlotEngine {
 
     func spin(betPerLine: Int) -> SpinResult {
         var localRng: any RandomNumberGenerator = rng
-        let matrix = SlotSymbolFactory.randomMatrix(using: &localRng)
+        var matrix = SlotSymbolFactory.randomMatrix(using: &localRng)
+
+        // Гарантируем выигрыш в примерно 40% спинов
+        if Int.random(in: 0..<100, using: &localRng) < 40 {
+            // Сделаем выигрышную линию: например, первая линия всегда с одинаковыми символами
+            let winSymbol: SlotSymbol = .s1
+            let payline = paylines[0]
+            for reel in 0..<5 {
+                matrix[reel][payline.rows[reel]] = winSymbol
+            }
+        }
+
         rng = localRng as! SystemRandomNumberGenerator
 
         let eval = evaluate(matrix: matrix, betPerLine: betPerLine)
@@ -43,6 +54,7 @@ final class SlotEngine {
         for line in paylines {
             let firstSymbol = matrix[0][line.rows[0]]
             var count = 1
+
             for reel in 1..<5 {
                 if matrix[reel][line.rows[reel]] == firstSymbol {
                     count += 1
@@ -50,8 +62,11 @@ final class SlotEngine {
                     break
                 }
             }
-            if count >= 3, let mult = payoutTable.multiplier(for: firstSymbol, count: count) {
-                let amount = mult * betPerLine
+
+            // тут можно снизить порог выигрыша до 2 символов, чтобы выигрышей было больше
+            if count >= 2, let mult = payoutTable.multiplier(for: firstSymbol, count: count) {
+                let increasedMult = mult * 2 // или другой множитель для увеличения выигрыша
+                let amount = increasedMult * betPerLine
                 wins.append(LineWin(payline: line, symbol: firstSymbol, count: count, amount: amount))
             }
         }
