@@ -1,33 +1,75 @@
 import AVFoundation
-import Foundation
+import SwiftUI
 
 final class AudioManager: ObservableObject {
     static let shared = AudioManager()
-    private var players: [String: AVAudioPlayer] = [:]
-    @Published var isMuted: Bool = false
-
-    private init() { }
-
-    func play(_ name: String, ext: String = "mp3", volume: Float = 0.8) {
-        guard !isMuted else { return }
-        let key = name + "." + ext
-        if let player = players[key] {
-            player.currentTime = 0
-            player.volume = volume
-            player.play()
-            return
+    var bgPlayer: AVAudioPlayer?
+    
+    
+    @Published var backgroundVolume: Float = 1 {
+        didSet {
+            bgPlayer?.volume = backgroundVolume
         }
-        guard let url = Bundle.main.url(forResource: name, withExtension: ext) else { return }
-        do {
-            let player = try AVAudioPlayer(contentsOf: url)
-            player.volume = volume
-            player.prepareToPlay()
-            player.play()
-            players[key] = player
-        } catch {
-            // ignore
+    }
+    
+    @Published var isSoundEnabled: Bool = true
+    @AppStorage("isMusicEnabled") var isMusicEnabled: Bool = false
+    
+    init() {
+        loadBackgroundMusic()
+        
+        if isMusicEnabled {
+            playBackgroundMusic()
+        }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
+    }
+    
+    @objc private func appWillResignActive() {
+        stopBackgroundMusic()
+    }
+    
+    @objc private func appDidBecomeActive() {
+        if isMusicEnabled {
+            playBackgroundMusic()
+        }
+    }
+    
+    private func loadBackgroundMusic() {
+        if let url = Bundle.main.url(forResource: "music", withExtension: "mp3") {
+            do {
+                bgPlayer = try AVAudioPlayer(contentsOf: url)
+                bgPlayer?.numberOfLoops = -1
+                bgPlayer?.volume = backgroundVolume
+                bgPlayer?.prepareToPlay()
+            } catch {
+                print("Ошибка \(error)")
+            }
+        }
+    }
+    
+    
+    func playBackgroundMusic() {
+        if isMusicEnabled {
+            bgPlayer?.play()
+        }
+    }
+    
+    func stopBackgroundMusic() {
+        bgPlayer?.stop()
+    }
+    
+    func toggleSound() {
+        isSoundEnabled.toggle()
+    }
+    
+    func toggleMusic() {
+        isMusicEnabled.toggle()
+        if isMusicEnabled {
+            playBackgroundMusic()
+        } else {
+            stopBackgroundMusic()
         }
     }
 }
-
-

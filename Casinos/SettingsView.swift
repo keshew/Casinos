@@ -1,10 +1,11 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @State private var hapticsOn: Bool = true
-    @State private var animationsOn: Bool = true
-    @State private var showPaylines: Bool = true
-    @State private var isMuted: Bool = AudioManager.shared.isMuted
+    @AppStorage("hapticsOn") private var hapticsOn = false
+    @AppStorage("animationsOn") private var animationsOn = false
+    @AppStorage("showPaylines") private var showPaylines = false
+    @AppStorage("isMuted") private var isMuted = false
+    @ObservedObject private var audioManager = AudioManager.shared
 
     var body: some View {
         ZStack {
@@ -30,26 +31,34 @@ struct SettingsView: View {
                     Section(header: Text("Audio").foregroundColor(.white)) {
                         Toggle("Mute sound", isOn: Binding(
                             get: { isMuted },
-                            set: { isMuted = $0; AudioManager.shared.isMuted = $0 }
+                            set: { newValue in
+                                isMuted = newValue
+                                AudioManager.shared.isMusicEnabled = !newValue
+                                if newValue {
+                                    AudioManager.shared.stopBackgroundMusic()
+                                } else {
+                                    AudioManager.shared.playBackgroundMusic()
+                                }
+                            }
                         ))
-                        .tint(.white)
+                        .tint(Color(red: 4/255, green: 19/255, blue: 119/255))
                         .foregroundColor(.white)
                     }
                     .listRowBackground(Color.white.opacity(0.05))
 
                     Section(header: Text("Haptics").foregroundColor(.white)) {
                         Toggle("Haptics", isOn: $hapticsOn)
-                            .tint(.white)
+                            .tint(Color(red: 4/255, green: 19/255, blue: 119/255))
                             .foregroundColor(.white)
                     }
                     .listRowBackground(Color.white.opacity(0.05))
 
                     Section(header: Text("Gameplay").foregroundColor(.white)) {
                         Toggle("Animations", isOn: $animationsOn)
-                            .tint(.white)
+                            .tint(Color(red: 4/255, green: 19/255, blue: 119/255))
                             .foregroundColor(.white)
                         Toggle("Show paylines", isOn: $showPaylines)
-                            .tint(.white)
+                            .tint(Color(red: 4/255, green: 19/255, blue: 119/255))
                             .foregroundColor(.white)
                     }
                     .listRowBackground(Color.white.opacity(0.05))

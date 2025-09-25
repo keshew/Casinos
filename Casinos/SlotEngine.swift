@@ -40,7 +40,6 @@ final class SlotEngine {
         var wins: [LineWin] = []
         var jackpotWon = false
 
-        // Line evaluation: left to right, count consecutive identical symbols starting at reel 0 position of the payline.
         for line in paylines {
             let firstSymbol = matrix[0][line.rows[0]]
             var count = 1
@@ -57,8 +56,6 @@ final class SlotEngine {
             }
         }
 
-        // Jackpot: if any row across reels shows only required symbols (in any order) on the same line, award jackpot
-        // Here we define a simple rule: middle row (row 1) all symbols belong to required set -> jackpot
         let middleRowSymbols = (0..<5).map { matrix[$0][1] }
         if Set(middleRowSymbols).isSubset(of: jackpot.requiredSymbols) {
             jackpotWon = true

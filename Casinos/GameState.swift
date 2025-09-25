@@ -3,33 +3,55 @@ import SwiftUI
 
 @MainActor
 final class GameState: ObservableObject {
-    @Published var balance: Int = 10_000
+    @AppStorage("balance") var balance: Int = 10_000
     @Published var betPerLine: Int = 10
     @Published var lastWin: Int = 0
     @Published var isSpinning: Bool = false
     @Published var matrix: [[SlotSymbol]] = Array(repeating: Array(repeating: .s1, count: 3), count: 5)
     @Published var lineWins: [LineWin] = []
     @Published var jackpotWon: Bool = false
-    @Published var tickets: Int = 0 // fictional tickets for store purchases
-    @Published var achievements: [Achievement] = [
-        Achievement(title: "First Spin", rewardTickets: 10, unlocked: false),
-        Achievement(title: "Win 1,000", rewardTickets: 20, unlocked: false),
-        Achievement(title: "Hit Jackpot", rewardTickets: 100, unlocked: false),
-        Achievement(title: "Win 5,000", rewardTickets: 30, unlocked: false),
-        Achievement(title: "Win 10,000", rewardTickets: 40, unlocked: false),
-        Achievement(title: "Spin 50 times", rewardTickets: 50, unlocked: false),
-        Achievement(title: "Spin 100 times", rewardTickets: 60, unlocked: false),
-        Achievement(title: "5 line wins in one spin", rewardTickets: 80, unlocked: false),
-        Achievement(title: "Balance 100,000", rewardTickets: 100, unlocked: false),
-        Achievement(title: "Buy first item", rewardTickets: 15, unlocked: false)
-    ]
+    @AppStorage("tickets") var tickets: Int = 0
+    @AppStorage("achievementsData") private var achievementsData: Data = Data()
 
+    @Published var achievements: [Achievement] = [] {
+        didSet {
+            saveAchievements()
+        }
+    }
+    
+    private func loadAchievements() {
+        if let decoded = try? JSONDecoder().decode([Achievement].self, from: achievementsData), !decoded.isEmpty {
+            achievements = decoded
+        } else {
+            achievements = [
+                Achievement(title: "First Spin", rewardTickets: 10, unlocked: false),
+                Achievement(title: "Win 1,000", rewardTickets: 20, unlocked: false),
+                Achievement(title: "Hit Jackpot", rewardTickets: 100, unlocked: false),
+                Achievement(title: "Win 5,000", rewardTickets: 30, unlocked: false),
+                Achievement(title: "Win 10,000", rewardTickets: 40, unlocked: false),
+                Achievement(title: "Spin 50 times", rewardTickets: 50, unlocked: false),
+                Achievement(title: "Spin 100 times", rewardTickets: 60, unlocked: false),
+                Achievement(title: "5 line wins in one spin", rewardTickets: 80, unlocked: false),
+                Achievement(title: "Balance 100,000", rewardTickets: 100, unlocked: false),
+                Achievement(title: "Buy first item", rewardTickets: 15, unlocked: false)
+            ]
+            saveAchievements()
+        }
+    }
+
+    private func saveAchievements() {
+        if let encoded = try? JSONEncoder().encode(achievements) {
+            achievementsData = encoded
+        }
+    }
+    
     let paylines = Paylines20.all
     private let engine = SlotEngine()
 
     init() {
         var rng: any RandomNumberGenerator = SystemRandomNumberGenerator()
         matrix = SlotSymbolFactory.randomMatrix(using: &rng)
+        loadAchievements()
     }
     
     func spin() {
@@ -42,7 +64,7 @@ final class GameState: ObservableObject {
         lastWin = 0
         jackpotWon = false
         lineWins = []
-        AudioManager.shared.play("spin")
+        
 
         Task { [weak self] in
             guard let self else { return }
@@ -59,12 +81,9 @@ final class GameState: ObservableObject {
             self.jackpotWon = result.jackpotWon
             self.balance += result.totalWin
             self.isSpinning = false
-            AudioManager.shared.play("stop")
             if result.totalWin > 0 {
-                AudioManager.shared.play("win")
             }
             if result.jackpotWon {
-                AudioManager.shared.play("jackpot")
             }
             self.evaluateAchievements()
         }
@@ -80,9 +99,6 @@ final class GameState: ObservableObject {
         lastWin = result.totalWin
         jackpotWon = result.jackpotWon
         balance += result.totalWin
-        AudioManager.shared.play("stop")
-        if result.totalWin > 0 { AudioManager.shared.play("win") }
-        if result.jackpotWon { AudioManager.shared.play("jackpot") }
         evaluateAchievements()
     }
 
@@ -126,6 +142,7 @@ final class GameState: ObservableObject {
         guard achievements[idx].unlocked == false else { return }
         achievements[idx].unlocked = true
         tickets += achievements[idx].rewardTickets
+        saveAchievements()
     }
 }
 

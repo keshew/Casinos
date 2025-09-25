@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct WheelView: View {
+    @EnvironmentObject private var game: GameState
     @State private var angle: Double = 0
     @State private var isSpinning: Bool = false
     @State private var resultText: String = ""
@@ -97,7 +98,10 @@ struct WheelView: View {
                                 .foregroundColor(.white).font(.system(size: 20, weight: .bold))
                                 .padding(.top, 190)
                             
-                            Button(action: { showWinOverlay = false }) {
+                            Button(action: {
+                                showWinOverlay = false
+                                game.balance += prizeAmount
+                            }) {
                                 LinearGradient(colors: [Color(red: 0.1294, green: 0.8, blue: 0.3176), Color(red: 0.0863, green: 0.4314, blue: 0.3333)], startPoint: .leading, endPoint: .trailing)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 14)

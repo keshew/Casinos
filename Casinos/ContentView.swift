@@ -12,6 +12,7 @@ struct ContentView: View {
 
             VStack(spacing: 16) {
                 header
+                    .padding(.horizontal, UIScreen.main.bounds.size.width > 900 ? 290 : UIScreen.main.bounds.size.width > 700 ? 160 : 0)
                 cabinet
                 controlsBar
                 footer
@@ -36,13 +37,23 @@ private extension ContentView {
             statCard(title: "Bet/line", value: "\(game.betPerLine)", color: .cyan)
             statCard(title: "Lines", value: "\(game.paylines.count)", color: .orange)
             Spacer(minLength: 0)
-            Button(action: { isMuted.toggle(); AudioManager.shared.isMuted = isMuted }) {
+            Button(action: {
+                isMuted.toggle()
+                AudioManager.shared.isMusicEnabled = !isMuted
+                if isMuted {
+                    AudioManager.shared.stopBackgroundMusic()
+                } else {
+                    AudioManager.shared.playBackgroundMusic()
+                }
+            }) {
                 Image(systemName: isMuted ? "speaker.slash.fill" : "speaker.wave.2.fill")
                     .foregroundColor(.white)
                     .padding(10)
                     .background(Color.white.opacity(0.12))
                     .clipShape(Circle())
             }
+            .disabled(true)
+            .hidden()
         }
     }
 

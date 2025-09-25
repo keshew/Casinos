@@ -7,6 +7,7 @@ struct HomeView: View {
     @State private var showAchievements = false
     @State private var showSettings = false
     @State private var showWheel = false
+    @ObservedObject var audio = AudioManager()
     
     var body: some View {
         ZStack {
