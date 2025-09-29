@@ -9,8 +9,16 @@ struct SettingsView: View {
 
     var body: some View {
         ZStack {
-            Color(red: 0.0117, green: 0.0745, blue: 0.1608)
-                .ignoresSafeArea()
+            LinearGradient(
+          gradient: Gradient(colors: [
+              Color(red: 23/255, green: 29/255, blue: 41/255),
+              Color(red: 33/255, green: 39/255, blue: 71/255),
+              Color(red: 20/255, green: 20/255, blue: 20/255)
+          ]),
+          startPoint: .topLeading,
+          endPoint: .bottomTrailing
+      )
+      .ignoresSafeArea()
 
             VStack(alignment: .leading, spacing: 12) {
                 HStack {

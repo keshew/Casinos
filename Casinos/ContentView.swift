@@ -7,8 +7,17 @@ struct ContentView: View {
 
     var body: some View {
         ZStack {
-            Color(red: 0.0117, green: 0.0745, blue: 0.1608)
-                .ignoresSafeArea()
+            LinearGradient(
+                gradient: Gradient(colors: [
+                    Color(red: 3/255, green: 19/255, blue: 41/255),
+                    Color(red: 3/255, green: 19/255, blue: 41/255),
+                    Color(red: 10/255, green: 40/255, blue: 125/255)
+                ]),
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
+
 
             VStack(spacing: 16) {
                 header
@@ -175,6 +184,7 @@ private extension ContentView {
                     HStack(spacing: 10) {
                         ForEach(game.lineWins) { win in
                             Text("Line #\(win.payline.id): x\(win.count) \(win.symbol.rawValue)slot = +\(win.amount)")
+                                .foregroundStyle(.white)
                                 .padding(8)
                                 .background(RoundedRectangle(cornerRadius: 8).fill(Color.white.opacity(0.08)))
                         }

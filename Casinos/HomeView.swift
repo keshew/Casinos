@@ -9,10 +9,27 @@ struct HomeView: View {
     @State private var showWheel = false
     @ObservedObject var audio = AudioManager()
     
+    let buttonGradient = LinearGradient(
+        gradient: Gradient(colors: [
+            Color(red: 48/255, green: 25/255, blue: 52/255),
+            Color(red: 94/255, green: 44/255, blue: 102/255)  
+        ]),
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+    )
+
     var body: some View {
         ZStack {
-                Color(red: 0.0117, green: 0.0745, blue: 0.1608) // #031329
-                    .ignoresSafeArea()
+            LinearGradient(
+                gradient: Gradient(colors: [
+                    Color(red: 3/255, green: 19/255, blue: 41/255),
+                    Color(red: 3/255, green: 19/255, blue: 41/255),
+                    Color(red: 40/255, green: 10/255, blue: 70/255)
+                ]),
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
                 
                 VStack(spacing: 20) {
                     Text("Win Slots Casino")
@@ -28,27 +45,27 @@ struct HomeView: View {
                     
                     Spacer()
                     
-                VStack(spacing: 12) {
-                    Button { showGame = true } label: {
-                        primaryButton(icon: "rectangle.grid.3x2.fill", text: "Slots", color: Color(red: 0.9294, green: 0.0863, blue: 0.1686))
-                    }
-                    .frame(height: 52)
+                    VStack(spacing: 15) {
+                        Button { showGame = true } label: {
+                            primaryButton(icon: "rectangle.grid.3x2.fill", text: "Slots", gradient: buttonGradient)
+                        }
+                        .frame(height: 52)
 
-                    Button { showWheel = true } label: {
-                        primaryButton(icon: "dial.max.fill", text: "Wheel", color: Color(red: 0.9294, green: 0.0863, blue: 0.1686))
-                    }
-                    .frame(height: 52)
+                        Button { showWheel = true } label: {
+                            primaryButton(icon: "dial.max.fill", text: "Wheel", gradient: buttonGradient)
+                        }
+                        .frame(height: 52)
 
-                    Button { showStore = true } label: {
-                        primaryButton(icon: "cart.fill", text: "Shop", color: Color(red: 0.9294, green: 0.0863, blue: 0.1686))
-                    }
-                    .frame(height: 52)
+                        Button { showStore = true } label: {
+                            primaryButton(icon: "cart.fill", text: "Shop", gradient: buttonGradient)
+                        }
+                        .frame(height: 52)
 
-                    Button { showAchievements = true } label: {
-                        primaryButton(icon: "rosette", text: "Achievements", color: Color(red: 0.9294, green: 0.0863, blue: 0.1686))
+                        Button { showAchievements = true } label: {
+                            primaryButton(icon: "rosette", text: "Achievements", gradient: buttonGradient)
+                        }
+                        .frame(height: 52)
                     }
-                    .frame(height: 52)
-                }
                 .padding(.horizontal, 40)
                     
                     Spacer()
@@ -90,16 +107,26 @@ struct HomeView: View {
             .cornerRadius(16)
     }
     
-    func primaryButton(icon: String, text: String, color: Color) -> some View {
-        HStack(spacing: 10) {
-            Image(systemName: icon)
-            Text(text).bold()
-        }
-        .foregroundColor(.white)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(RoundedRectangle(cornerRadius: 14).fill(color))
-        .shadow(color: color.opacity(0.5), radius: 10, x: 0, y: 4)
+func primaryButton(icon: String, text: String, gradient: LinearGradient) -> some View {
+    HStack(spacing: 10) {
+        Image(systemName: icon)
+        Text(text).bold()
     }
+    .foregroundColor(.white)
+    .padding()
+    .frame(maxWidth: .infinity)
+    .background(
+        RoundedRectangle(cornerRadius: 14)
+            .fill(gradient.opacity(0.7))
+    )
+    .overlay(
+        RoundedRectangle(cornerRadius: 14)
+            .stroke(.white, lineWidth: 0.5)  // Градиентная обводка
+    )
+    .shadow(color: Color.black.opacity(0.3), radius: 6, x: 0, y: 3)
+}
+
+
 
 
 #Preview {

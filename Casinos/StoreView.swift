@@ -3,6 +3,10 @@ import SwiftUI
 struct StoreView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var game: GameState
+
+    @State private var showAlert = false
+    @State private var alertMessage = ""
+
     var body: some View {
         VStack(spacing: 16) {
             HStack {
@@ -13,14 +17,25 @@ struct StoreView: View {
                 Spacer()
                 SettingsButton()
             }
-//            .padding(.top)
 
             storeItems
 
             Spacer()
         }
         .padding(.horizontal)
-        .background(Color(red: 0.0117, green: 0.0745, blue: 0.1608).ignoresSafeArea())
+        .background(      LinearGradient(
+            gradient: Gradient(colors: [
+                Color(red: 23/255, green: 29/255, blue: 41/255),
+                Color(red: 3/255, green: 19/255, blue: 41/255),
+                Color(red: 40/255, green: 50/255, blue: 70/255)
+            ]),
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+        .ignoresSafeArea())
+        .alert(alertMessage, isPresented: $showAlert) {
+            Button("OK", role: .cancel) {}
+        }
     }
 
     var storeItems: some View {
@@ -29,10 +44,33 @@ struct StoreView: View {
                 Text("Tickets: \(game.tickets)").foregroundColor(.white)
                 Spacer()
             }
-            StoreItemRow(title: "+5,000 Balance", price: "20 tickets") { _ = game.buyBalance(amount: 5_000, priceTickets: 20) }
-            StoreItemRow(title: "+20,000 Balance", price: "60 tickets") { _ = game.buyBalance(amount: 20_000, priceTickets: 60) }
-            StoreItemRow(title: "Double Bet", price: "40 tickets") { _ = game.buyDoubleBet(spins: 10, priceTickets: 40) }
-            StoreItemRow(title: "Jackpot Boost", price: "50 tickets") { /* Placeholder: could bias engine */ }
+            StoreItemRow(title: "+5,000 Balance", price: "20 tickets") {
+                let success = game.buyBalance(amount: 5_000, priceTickets: 20)
+                if success {
+                    alertMessage = "You have successfully purchased +5,000 Balance!"
+                } else {
+                    alertMessage = "You do not have enough tickets to make this purchase."
+                }
+                showAlert = true
+            }
+            StoreItemRow(title: "+20,000 Balance", price: "60 tickets") {
+                let success = game.buyBalance(amount: 20_000, priceTickets: 60)
+                if success {
+                    alertMessage = "You have successfully purchased +20,000 Balance!"
+                } else {
+                    alertMessage = "You do not have enough tickets to make this purchase."
+                }
+                showAlert = true
+            }
+            StoreItemRow(title: "Double Bet", price: "40 tickets") {
+                let success = game.buyDoubleBet(spins: 10, priceTickets: 40)
+                if success {
+                    alertMessage = "You have successfully purchased Double Bet (10 spins)!"
+                } else {
+                    alertMessage = "You do not have enough tickets to make this purchase."
+                }
+                showAlert = true
+            }
         }
     }
 }
@@ -61,7 +99,6 @@ private struct StoreItemRow: View {
         .background(RoundedRectangle(cornerRadius: 12).fill(Color.white.opacity(0.08)))
     }
 }
-
 
 #Preview {
     StoreView()

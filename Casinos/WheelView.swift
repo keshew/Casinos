@@ -15,8 +15,17 @@ struct WheelView: View {
 
     var body: some View {
         ZStack {
-            Color(red: 0.0117, green: 0.0745, blue: 0.1608)
-                .ignoresSafeArea()
+            LinearGradient(
+                gradient: Gradient(colors: [
+                    Color(red: 41/255, green: 10/255, blue: 10/255),
+                    Color(red: 25/255, green: 7/255, blue: 7/255),
+                    Color(red: 41/255, green: 10/255, blue: 10/255), 
+                ]),
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
+
 
             VStack(spacing: 12) {
                 HStack {
